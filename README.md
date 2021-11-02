@@ -7,7 +7,7 @@ Connect with your crypto wallet to buy Discord NFT emotes or list your own NFT e
 
 current NFT emote support functionality:
 
-upload emote as NFT to Pinata 
+upload emote as NFT to Pinata IPFS
 
 verify hash against emote image
 
