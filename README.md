@@ -1,4 +1,7 @@
 # Emote Shop NFT Macha, buy Discord NFT emotes with Cryptocurrency!
+
+https://machdragon.github.io/EmoteShopMacha/
+
 ![alt text](https://i.imgur.com/bom1ybx.png)
 
 Connect with your crypto wallet to buy Discord NFT emotes or list your own NFT emotes by adding your products to the site!
