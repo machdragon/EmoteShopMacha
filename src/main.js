@@ -8,7 +8,7 @@ const ERC20_DECIMALS = 18
 //default contract
 //const MPContractAddress = "0x178134c92EC973F34dD0dd762284b852B211CFC8"
 //my contract
-const MPContractAddress = "0x84a3f91a13EC680CB18703e85A9eDfF08421773E"
+const MPContractAddress = "0x5A87e8F4FAee443472f61d721720443119D7Ef04"
 
 const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1"
 
@@ -65,7 +65,7 @@ const getProducts = async function() {
         name: p[1],
         image: p[2],
         description: p[3],
-        location: p[4],
+        hash: p[4],
         price: new BigNumber(p[5]),
         sold: p[6],
       })
@@ -103,7 +103,7 @@ function productTemplate(_product) {
         </p>
         <p class="card-text mt-4">
           <i class="bi bi-geo-alt-fill"></i>
-          <span>${_product.location}</span>
+          <span>${_product.hash}</span>
         </p>
         <div class="d-grid gap-2">
           <a class="btn btn-lg btn-outline-dark buyBtn fs-6 p-3" id=${
@@ -160,7 +160,7 @@ document
       document.getElementById("newProductName").value,
       document.getElementById("newImgUrl").value,
       document.getElementById("newProductDescription").value,
-      document.getElementById("newLocation").value,
+      document.getElementById("newhash").value,
       new BigNumber(document.getElementById("newPrice").value)
       .shiftedBy(ERC20_DECIMALS)
       .toString()

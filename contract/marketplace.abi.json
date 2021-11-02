@@ -93,7 +93,7 @@
 			},
 			{
 				"internalType": "string",
-				"name": "_location",
+				"name": "_hash",
 				"type": "string"
 			},
 			{
