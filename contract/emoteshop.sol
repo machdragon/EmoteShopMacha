@@ -14,7 +14,7 @@ interface IERC20Token {
   event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-contract Marketplace {
+contract EmoteShop {
 
     uint internal productsLength = 0;
     address internal cUsdTokenAddress = 0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1;
@@ -30,6 +30,11 @@ contract Marketplace {
     }
 
     mapping (uint => Product) internal products;
+
+    modifier onlyOwner (uint _index){
+        require( products[_index].owner == msg.sender, "Only the owner of this Nft can call this" ); 
+        _;
+    }
 
     function writeProduct(
         string memory _name,
@@ -81,6 +86,11 @@ contract Marketplace {
           "Transfer failed."
         );
         products[_index].sold++;
+    }
+     function editPrice(uint _index, uint _price) onlyOwner(_index) public  {
+      
+       require(_price > 0, "Please enter a valid price" );
+        products[_index].price = _price;
     }
     
     function getProductsLength() public view returns (uint) {
