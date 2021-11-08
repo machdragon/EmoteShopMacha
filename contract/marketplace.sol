@@ -31,13 +31,18 @@ contract Marketplace {
 
     mapping (uint => Product) internal products;
 
+    modifier isAdmin(uint _id){
+         require(msg.sender == address(this),"Accessible only to the admin");
+        _;
+    }
+
     function writeProduct(
         string memory _name,
         string memory _image,
         string memory _description, 
         string memory _location, 
         uint _price
-    ) public {
+    ) isAdmin() public {
         uint _sold = 0;
         products[productsLength] = Product(
             payable(msg.sender),
