@@ -1,89 +1,104 @@
-import Web3 from "web3"
-import { newKitFromWeb3 } from "@celo/contractkit"
-import BigNumber from "bignumber.js"
-import marketplaceAbi from "../contract/marketplace.abi.json"
-import erc20Abi from "../contract/erc20.abi.json"
+import Web3 from "web3";
+import { newKitFromWeb3 } from "@celo/contractkit";
+import BigNumber from "bignumber.js";
+import marketplaceAbi from "../contract/marketplace.abi.json";
+import erc20Abi from "../contract/erc20.abi.json";
 
-const ERC20_DECIMALS = 18
+const ERC20_DECIMALS = 18;
 //default contract
 //const MPContractAddress = "0x178134c92EC973F34dD0dd762284b852B211CFC8"
 //my contract
-const MPContractAddress = "0x5A87e8F4FAee443472f61d721720443119D7Ef04"
+const MPContractAddress = "0x5A87e8F4FAee443472f61d721720443119D7Ef04";
 
-const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1"
+const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
 
-let kit
-let contract
-let products = []
+let kit;
+let contract;
+let products = [];
 
 const connectCeloWallet = async function () {
   if (window.celo) {
     try {
-      notification("⚠️ Please approve this DApp to use it.")
-      await window.celo.enable()
-      notificationOff()
-      const web3 = new Web3(window.celo)
-      kit = newKitFromWeb3(web3)
+      notification("⚠️ Please approve this DApp to use it.");
+      await window.celo.enable();
+      notificationOff();
+      const web3 = new Web3(window.celo);
+      kit = newKitFromWeb3(web3);
 
-      const accounts = await kit.web3.eth.getAccounts()
-      kit.defaultAccount = accounts[0]
+      const accounts = await kit.web3.eth.getAccounts();
+      kit.defaultAccount = accounts[0];
 
-      contract = new kit.web3.eth.Contract(marketplaceAbi, MPContractAddress)
+      contract = new kit.web3.eth.Contract(marketplaceAbi, MPContractAddress);
     } catch (error) {
-      notification(`⚠️ ${error}.`)
+      notification(`⚠️ ${error}.`);
     }
   } else {
-    notification("⚠️ Please install the CeloExtensionWallet.")
+    notification("⚠️ Please install the CeloExtensionWallet.");
   }
-}
+};
 
 async function approve(_price) {
-  const cUSDContract = new kit.web3.eth.Contract(erc20Abi, cUSDContractAddress)
+  try {
+    const cUSDContract = new kit.web3.eth.Contract(
+      erc20Abi,
+      cUSDContractAddress
+    );
 
-  const result = await cUSDContract.methods
-    .approve(MPContractAddress, _price)
-    .send({ from: kit.defaultAccount })
-  return result
+    const result = await cUSDContract.methods
+      .approve(MPContractAddress, _price)
+      .send({ from: kit.defaultAccount });
+    return result;
+  } catch (error) {
+    notification(`⚠️ ${error}.`);
+  }
 }
 
 const getBalance = async function () {
-  const totalBalance = await kit.getTotalBalance(kit.defaultAccount)
-  const cUSDBalance = totalBalance.cUSD.shiftedBy(-ERC20_DECIMALS).toFixed(2)
-  document.querySelector("#balance").textContent = cUSDBalance
-}
-
-const getProducts = async function() {
-  const _productsLength = await contract.methods.getProductsLength().call()
-  const _products = []
-
-  for (let i = 0; i < _productsLength; i++) {
-    let _product = new Promise(async (resolve, reject) => {
-      let p = await contract.methods.readProduct(i).call()
-      resolve({
-        index: i,
-        owner: p[0],
-        name: p[1],
-        image: p[2],
-        description: p[3],
-        hash: p[4],
-        price: new BigNumber(p[5]),
-        sold: p[6],
-      })
-    })
-    _products.push(_product)
+  try {
+    const totalBalance = await kit.getTotalBalance(kit.defaultAccount);
+    const cUSDBalance = totalBalance.cUSD.shiftedBy(-ERC20_DECIMALS).toFixed(2);
+    document.querySelector("#balance").textContent = cUSDBalance;
+  } catch (error) {
+    notification(`⚠️ ${error}.`);
   }
-  products = await Promise.all(_products)
-  renderProducts()
-}
+};
+
+const getProducts = async function () {
+  try {
+    const _productsLength = await contract.methods.getProductsLength().call();
+    const _products = [];
+
+    for (let i = 0; i < _productsLength; i++) {
+      let _product = new Promise(async (resolve, reject) => {
+        let p = await contract.methods.readProduct(i).call();
+        resolve({
+          index: i,
+          owner: p[0],
+          name: p[1],
+          image: p[2],
+          description: p[3],
+          hash: p[4],
+          price: new BigNumber(p[5]),
+          sold: p[6],
+        });
+      });
+      _products.push(_product);
+    }
+    products = await Promise.all(_products);
+    renderProducts();
+  } catch (error) {
+    notification(`⚠️ ${error}.`);
+  }
+};
 
 function renderProducts() {
-  document.getElementById("marketplace").innerHTML = ""
+  document.getElementById("marketplace").innerHTML = "";
   products.forEach((_product) => {
-    const newDiv = document.createElement("div")
-    newDiv.className = "col-md-4"
-    newDiv.innerHTML = productTemplate(_product)
-    document.getElementById("marketplace").appendChild(newDiv)
-  })
+    const newDiv = document.createElement("div");
+    newDiv.className = "col-md-4";
+    newDiv.innerHTML = productTemplate(_product);
+    document.getElementById("marketplace").appendChild(newDiv);
+  });
 }
 
 function productTemplate(_product) {
@@ -114,7 +129,7 @@ function productTemplate(_product) {
         </div>
       </div>
     </div>
-  `
+  `;
 }
 
 function identiconTemplate(_address) {
@@ -124,7 +139,7 @@ function identiconTemplate(_address) {
       size: 8,
       scale: 16,
     })
-    .toDataURL()
+    .toDataURL();
 
   return `
   <div class="rounded-circle overflow-hidden d-inline-block border border-white border-2 shadow-sm m-0">
@@ -133,24 +148,24 @@ function identiconTemplate(_address) {
         <img src="${icon}" width="48" alt="${_address}">
     </a>
   </div>
-  `
+  `;
 }
 
 function notification(_text) {
-  document.querySelector(".alert").style.display = "block"
-  document.querySelector("#notification").textContent = _text
+  document.querySelector(".alert").style.display = "block";
+  document.querySelector("#notification").textContent = _text;
 }
 
 function notificationOff() {
-  document.querySelector(".alert").style.display = "none"
+  document.querySelector(".alert").style.display = "none";
 }
 
-window.addEventListener('load', async () => {
-  notification("⌛ Loading...")
-  await connectCeloWallet()
-  await getBalance()
-  await getProducts()
-  notificationOff()
+window.addEventListener("load", async () => {
+  notification("⌛ Loading...");
+  await connectCeloWallet();
+  await getBalance();
+  await getProducts();
+  notificationOff();
 });
 
 document
@@ -162,40 +177,42 @@ document
       document.getElementById("newProductDescription").value,
       document.getElementById("newhash").value,
       new BigNumber(document.getElementById("newPrice").value)
-      .shiftedBy(ERC20_DECIMALS)
-      .toString()
-    ]
-    notification(`⌛ Adding "${params[0]}"...`)
+        .shiftedBy(ERC20_DECIMALS)
+        .toString(),
+    ];
+    notification(`⌛ Adding "${params[0]}"...`);
     try {
-      const result = await contract.methods
-        .writeProduct(...params)
-        .send({ from: kit.defaultAccount })
+      if (params[0] || params[1] || params[2] || params[3] || params[4]) {
+        await contract.methods
+          .writeProduct(...params)
+          .send({ from: kit.defaultAccount });
+      }
     } catch (error) {
-      notification(`⚠️ ${error}.`)
+      notification(`⚠️ ${error}.`);
     }
-    notification(`🎉 You successfully added "${params[0]}".`)
-    getProducts()
-  })
+    notification(`🎉 You successfully added "${params[0]}".`);
+    getProducts();
+  });
 
 document.querySelector("#marketplace").addEventListener("click", async (e) => {
   if (e.target.className.includes("buyBtn")) {
-    const index = e.target.id
-    notification("⌛ Waiting for payment approval...")
+    const index = e.target.id;
+    notification("⌛ Waiting for payment approval...");
     try {
-      await approve(products[index].price)
+      await approve(products[index].price);
     } catch (error) {
-      notification(`⚠️ ${error}.`)
+      notification(`⚠️ ${error}.`);
     }
-    notification(`⌛ Awaiting payment for "${products[index].name}"...`)
+    notification(`⌛ Awaiting payment for "${products[index].name}"...`);
     try {
       const result = await contract.methods
         .buyProduct(index)
-        .send({ from: kit.defaultAccount })
-      notification(`🎉 You successfully bought "${products[index].name}".`)
-      getProducts()
-      getBalance()
+        .send({ from: kit.defaultAccount });
+      notification(`🎉 You successfully bought "${products[index].name}".`);
+      getProducts();
+      getBalance();
     } catch (error) {
-      notification(`⚠️ ${error}.`)
+      notification(`⚠️ ${error}.`);
     }
   }
-})
+});
