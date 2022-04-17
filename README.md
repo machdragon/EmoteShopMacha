@@ -1,12 +1,18 @@
 # Emote Shop NFT Macha, buy Discord NFT emotes with Cryptocurrency!
+A website built with Javascript and Solidity on the Celo Blockchain
 
+Connect with your crypto wallet to buy Discord NFT emotes or list your own NFT emotes by adding your products to the site!
 https://machdragon.github.io/EmoteShopMacha/
 
 ![alt text](https://i.imgur.com/bom1ybx.png)
 
-Connect with your crypto wallet to buy Discord NFT emotes or list your own NFT emotes by adding your products to the site!
 
 ![alt text](https://i.imgur.com/06rVO2F.png)
+
+# To interact with the site, this requires the [CeloExtensionWallet](https://chrome.google.com/webstore/detail/celoextensionwallet/kkilomkmpmkbdnfelcpgckmpcaemjcdh/related?hl=en)
+
+## Test out the features by creating a wallet and selecting the Alfajores Test Network ![Alfajores Test Network](https://i.imgur.com/K82kVCY.png)
+## Then head to https://celo.org/developers/faucet to add some play money to your wallet address and buy NFTs on the site or list your own!
 
 current NFT emote support functionality:
 
@@ -17,10 +23,6 @@ verify hash against emote image
 Work in progress for full NFT support...
 
 credit NFT emote seller and deliver NFT to buyer wallet
-
-or learn how to build your own site below
-
-https://dacade.org/communities/celo-development-101
 
 # Install
 
