@@ -9,7 +9,7 @@ https://machdragon.github.io/EmoteShopMacha/
 
 ![alt text](https://i.imgur.com/06rVO2F.png)
 
-# To interact with the site, this requires the [CeloExtensionWallet](https://chrome.google.com/webstore/detail/celoextensionwallet/kkilomkmpmkbdnfelcpgckmpcaemjcdh/related?hl=en)
+## ⚠️ To interact with the site, this requires the [CeloExtensionWallet](https://chrome.google.com/webstore/detail/celoextensionwallet/kkilomkmpmkbdnfelcpgckmpcaemjcdh/related?hl=en)
 
 ## Test out the features by creating a wallet and selecting the Alfajores Test Network ![Alfajores Test Network](https://i.imgur.com/K82kVCY.png)
 ## Then head to https://celo.org/developers/faucet to add some play money to your wallet address and buy NFTs on the site or list your own!
